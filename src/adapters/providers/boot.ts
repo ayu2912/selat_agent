@@ -1,5 +1,6 @@
 import { createRegistry, type ProviderAdapter, type Registry } from './registry.ts'
 import { fakeProvider } from './fake.ts'
+import { sandboxProvider } from './sandbox.ts'
 import { discordProvider } from './discord.ts'
 import { facebookProvider } from './facebook.ts'
 import { githubProvider } from './github.ts'
@@ -27,7 +28,12 @@ export function bootRegistry(env: NodeJS.ProcessEnv = process.env): Registry {
   // An api key provider needs no OAuth application, so there is nothing for a
   // deployment to configure and nothing to gate on: every workspace brings its
   // own secret through PUT /v1/connections/:prefix/key.
-  const adapters: ProviderAdapter[] = [fakeProvider(), discordProvider(), stripeProvider()]
+  const adapters: ProviderAdapter[] = [
+    fakeProvider(),
+    sandboxProvider(),
+    discordProvider(),
+    stripeProvider(),
+  ]
   // Keyed on the grant's client id, not the prefix: gmail rides the google
   // application, so it appears the moment that one is configured.
   const gated = [
